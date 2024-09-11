@@ -39,6 +39,15 @@
 
 /* Write your CSS here */
 .remove-btn {
+  height: 0px;
+  width: 0px;
+  color: blue;
+  border-width: 0px;
+  background-color: white;
+  padding: 10px;
+}
+.top-container {
   display: flex;
+  flex-direction: row;
   justify-content: space-between;
 }

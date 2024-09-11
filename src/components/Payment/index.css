@@ -1,0 +1,26 @@
+.PaymentContainer {
+  display: flex;
+  flex-direction: column;
+  border: 15px;
+  background-color: white;
+}
+.Paymentheading {
+  font-size: 25px;
+  font-family: roboto;
+  color: black;
+}
+.Paymensubtheading {
+  font-size: 15px;
+  font-family: roboto;
+}
+.ProductList {
+  list-style-type: none;
+}
+.cartButton {
+  height: 30px;
+  width: 70px;
+  background-color: blue;
+  border-radius: 5px;
+  color: white;
+  border-width: 0px;
+}

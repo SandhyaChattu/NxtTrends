@@ -1,5 +1,5 @@
 import {AiFillCloseCircle} from 'react-icons/ai'
-
+import {BsPlusSquare, BsDashSquare} from 'react-icons/bs'
 import CartContext from '../../context/CartContext'
 
 import './index.css'
@@ -7,8 +7,23 @@ import './index.css'
 const CartItem = props => (
   <CartContext.Consumer>
     {value => {
+      const {
+        incrementCartItemQuantity,
+        decrementCartItemQuantity,
+        removeCartItem,
+      } = value
       const {cartItemDetails} = props
-      const {title, brand, quantity, price, imageUrl} = cartItemDetails
+      const {id, title, brand, quantity, price, imageUrl} = cartItemDetails
+      console.log(id)
+      const onIncrement = () => {
+        incrementCartItemQuantity(id)
+      }
+      const onDecrement = () => {
+        decrementCartItemQuantity(id)
+      }
+      const remove = () => {
+        removeCartItem(id)
+      }
       return (
         <li className="cart-item">
           <img className="cart-product-image" src={imageUrl} alt={title} />
@@ -18,14 +33,35 @@ const CartItem = props => (
               <p className="cart-product-brand">by {brand}</p>
             </div>
             <div className="cart-quantity-container">
+              <button
+                type="button"
+                className="quantity-controller-button"
+                onClick={onDecrement}
+                data-testid="minus"
+              >
+                <BsDashSquare color="#52606D" size={12} aria-label="close" />
+              </button>
               <p className="cart-quantity">{quantity}</p>
+              <button
+                type="button"
+                className="quantity-controller-button"
+                onClick={onIncrement}
+                data-testid="plus"
+              >
+                <BsPlusSquare color="#52606D" size={12} aria-label="close" />
+              </button>
             </div>
             <div className="total-price-remove-container">
               <p className="cart-total-price">Rs {price * quantity}/-</p>
             </div>
           </div>
 
-          <AiFillCloseCircle color="#616E7C" size={20} />
+          <AiFillCloseCircle
+            color="#616E7C"
+            size={20}
+            onClick={remove}
+            data-testid="remove"
+          />
         </li>
       )
     }}

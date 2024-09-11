@@ -19,41 +19,43 @@ class App extends Component {
 
   //   TODO: Add your code for remove all cart items, increment cart item quantity, decrement cart item quantity, remove cart item
   addQuantity = id => {
-    const {cartList} = this.state
-    cartList.map(eachItem => {
-      if (eachItem.id === id) {
-        return {...eachItem, quantity: eachItem.quantity + 1}
-      }
-      return eachItem
-    })
+    this.setState(prevState => ({
+      cartList: prevState.cartList.map(each =>
+        each.id === id ? {...each, quantity: each.quantity + 1} : each,
+      ),
+    }))
   }
 
-  addCartItem = (product, quantity) => {
+  addCartItem = product => {
     const {cartList} = this.state
-
     const checkList = cartList.filter(eachItem => eachItem.id === product.id)
     if (checkList.length === 0) {
-      this.setState(prevState => ({cartList: [...prevState.cartList, product]}))
+      this.setState(prevState => ({
+        cartList: [...prevState.cartList, product],
+      }))
     } else {
-      cartList.map(eachItem => {
-        if (eachItem.id === product.id) {
-          return {...eachItem, quantity: eachItem.quantity + quantity}
-        }
-        return eachItem
-      })
+      this.setState(prevState => ({
+        cartList: prevState.cartList.map(eachItem => {
+          if (eachItem.id === product.id) {
+            return {
+              ...eachItem,
+              quantity: eachItem.quantity + 1,
+            }
+          }
+          return eachItem
+        }),
+      }))
     }
   }
+
   //   TODO: Update the code here to implement addCartItem
 
   deleteQuantity = id => {
-    const {cartList} = this.state
-    cartList.map(eachItem => {
-      if (eachItem.id === id) {
-        return {...eachItem, quantity: eachItem.quantity - 1}
-      }
-      // console.log(eachItem.quantity)
-      return eachItem.quantity
-    })
+    this.setState(prevState => ({
+      cartList: prevState.cartList.map(each =>
+        each.id === id ? {...each, quantity: each.quantity - 1} : each,
+      ),
+    }))
   }
 
   removeCartItem = id => {
@@ -69,7 +71,6 @@ class App extends Component {
 
   render() {
     const {cartList} = this.state
-
     return (
       <CartContext.Provider
         value={{
