@@ -1,5 +1,7 @@
 import {useContext, useState} from 'react'
+
 import CartContext from '../../context/CartContext'
+
 import './index.css'
 
 const paymentOptionsList = [
@@ -31,44 +33,71 @@ const paymentOptionsList = [
 ]
 
 const Payment = () => {
-  const [isOrderPlaced, setPlaceOrder] = useState(false)
   const {cartList} = useContext(CartContext)
+
+  const [paymentMethod, setPaymentMethod] = useState('')
+  const [isOrderPlaced, setIsOrderPlaced] = useState(false)
+
+  const updatePaymentMethod = event => {
+    const {id} = event.target
+    setPaymentMethod(id)
+  }
+
+  const onPlaceOrder = () => setIsOrderPlaced(true)
 
   const getTotalPrice = () =>
     cartList.reduce((acc, item) => acc + item.quantity * item.price, 0)
 
-  const renderPaymentOptions = () => (
-    <ul className="ProductList">
-      {paymentOptionsList.map(each => (
-        <li key={each.id}>
-          {' '}
-          <input type="radio" id={each.id} name="Payment Method" />
-          <label htmlFor={each.id}>{each.displayText}</label>
+  const renderPaymentMethodsInput = () => (
+    <ul className="payment-method-inputs">
+      {paymentOptionsList.map(eachMethod => (
+        <li key={eachMethod.id} className="payment-method-input-container">
+          <input
+            className="payment-method-input"
+            id={eachMethod.id}
+            type="radio"
+            name="paymentMethod"
+            disabled={eachMethod.isDisabled}
+            onChange={updatePaymentMethod}
+          />
+          <label
+            className={`payment-method-label ${
+              eachMethod.isDisabled ? 'disabled-label' : ''
+            }`}
+            htmlFor={eachMethod.id}
+          >
+            {eachMethod.displayText}
+          </label>
         </li>
       ))}
     </ul>
   )
-  const renderSuccessMesage = () => (
-    <p>Your Order has been Succesfully Placed</p>
-  )
-  const ConfirmOrder = () => setPlaceOrder(true)
 
   return (
-    <div>
+    <div className="payments-container">
       {isOrderPlaced ? (
-        renderSuccessMesage()
+        <p className="success-message">
+          Your order has been placed successfully
+        </p>
       ) : (
-        <div className="PaymentsContainer">
-          <h1 className="Paymentheading">Payments Details</h1>
-          <p className="Paymentsubheading">Payments Method</p>
-          {renderPaymentOptions()}
-          <p className="order">Order details:</p>
-          <p>{cartList.length}</p>
-          <p>TotalPrice:{getTotalPrice()}</p>
-          <button onClick={ConfirmOrder} type="button" className="cartButton">
+        <>
+          <h1 className="payments-heading">Payments Details</h1>
+          <p className="payments-sub-heading">Payment Method</p>
+          {renderPaymentMethodsInput()}
+          <div className="order-details">
+            <p className="payments-sub-heading">Order details:</p>
+            <p>Quantity: {cartList.length}</p>
+            <p>Total Price: RS {getTotalPrice()}/-</p>
+          </div>
+          <button
+            disabled={paymentMethod === ''}
+            type="button"
+            className="confirm-order-button"
+            onClick={onPlaceOrder}
+          >
             Confirm Order
           </button>
-        </div>
+        </>
       )}
     </div>
   )
